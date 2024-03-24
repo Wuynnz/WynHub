@@ -8,7 +8,28 @@ IntroText = "Wyn Hub✓"
 })
 -- local
 local player = game.Players.LocalPlayer
+local backpack = player.Backpack
+local Shops = workspace.Shop:GetChildren()
+local SelectedShop = nil
+local SelectedWeaphon = nil
+local Shoptable = {}
+ for i, v in pairs(Shops) do
+           table.insert(Shoptable, v.name)
+end
+local Inv = {}
+ for i, v in pairs(backpack:GetChildren()) do
+    table.insert(Inv, v.name)
+end
 -- func
+local function unequip()
+    local equippedWeapon = player.Character:FindFirstChild(SelectedWeapon)
+    if equippedWeapon then
+        equippedWeapon.Parent = backpack
+    else
+        print("")
+    end
+end
+
 function AutoKokushibu()
     for i, v in pairs(workspace.Lives:GetChildren()) do
         if v.Humanoid.DisplayName == "Kokushibo [LV.8500]" then 
@@ -17,7 +38,15 @@ function AutoKokushibu()
     end
 end
 
-
+local function autoEquip()
+    
+    local We = player.Backpack:FindFirstChild(SelectedWeaphon)
+    if We then
+        We.Parent = player.Character
+    else
+        Print("")
+    end
+end
 
 function AutoPortal()
     local playerCharacter = player.Character
@@ -48,7 +77,41 @@ local ShopTab = Window:MakeTab({Name = "💸 Shop",Icon = "rbxassetid://44833459
 
 MainTab:AddParagraph("Dear Frieren,","Have a good day Frieren ! i cant stop thinking about you :( ")
 
+MainTab:AddDropdown({
+	Name = "Weaphons",
+	Default = "I <3 Frieren",
+	Options = Inv,
+	Callback = function(Value)
+		SelectedWeaphon = Value
+	end    
+})
+MainTab:AddButton({
+	Name = "Refresh Weaphons",
+	Callback = function()
+      	Inv = {}
+        for i, v in pairs(backpack:GetChildren()) do
+            table.insert(Inv, v.Name)
+        end
+        Dropdown:Refresh(Inv, true)
+         
+ 
+  	end    
+})
+
+MainTab:AddToggle({
+	Name = "Auto Equip",
+	Default = false,
+	Callback = function(State)
+           getgenv().autoEquipWeaphon = State
+               while autoEquipWeaphon == true do wait()
+		autoEquip()
+            end
+	end    
+})
+
+
 -- Portal tab
+PortalTab:AddParagraph("Frieren...", "")
 
 PortalTab:AddToggle({
 	Name = "Auto Join Portal",
@@ -58,6 +121,7 @@ PortalTab:AddToggle({
                   while AutoJoinPortal == true do 
                     AutoPortal()
                        wait()
+                
                     end
 	end    
 })
@@ -80,19 +144,12 @@ PortalTab:AddToggle({
 		getgenv().AutoKillKokushibo = State
                   while AutoKillKokushibo == true do wait()
                           AutoKokushibu()
-end
+              end
 	end    
 })
 
-
---[[
-Name = <string> - The name of the toggle.
-Default = <bool> - The default value of the toggle.
-Callback = <function> - The function of the toggle.
-]]
-
 -- Shop tab
-ShopTab:AddParagraph("Merchant","")
+ShopTab:AddParagraph("Merchant","Traveling Merchant spawn every 30 minutes")
 
 ShopTab:AddButton({
 	Name = "Tp To Traveling Merchant",
@@ -105,7 +162,29 @@ ShopTab:AddButton({
   	end    
 })
 
---[[
-Name = <string> - The name of the button.
-Callback = <function> - The function of the button.
-]]
+local Spawned = workspace.NPC:FindFirstChild("Traveling merchant")
+ if Spawned then 
+       Spawn = "Spawned"
+ else
+       Spawn = "Not Spawn"
+end
+ShopTab:AddParagraph("Merchant Bug* wait till fixed", Spawn)
+
+ShopTab:AddParagraph("Frieren...", "")
+
+ShopTab:AddDropdown({
+	Name = "Shops",
+	Default = "I <3 Frieren",
+	Options = Shoptable,
+	Callback = function(Value)
+		SelectedShop = Value
+
+	end    
+})
+
+ShopTab:AddButton({
+    Name = "Teleport To Selected Shop",
+    Callback = function()
+        player.Character.HumanoidRootPart.CFrame = game.workspace.Shop[SelectedShop].CFrame
+    end    
+})
