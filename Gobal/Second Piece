@@ -21,15 +21,6 @@ local Inv = {}
     table.insert(Inv, v.name)
 end
 -- func
-local function unequip()
-    local equippedWeapon = player.Character:FindFirstChild(SelectedWeapon)
-    if equippedWeapon then
-        equippedWeapon.Parent = backpack
-    else
-        print("")
-    end
-end
-
 function AutoKokushibu()
     for i, v in pairs(workspace.Lives:GetChildren()) do
         if v.Humanoid.DisplayName == "Kokushibo [LV.8500]" then 
@@ -84,18 +75,6 @@ MainTab:AddDropdown({
 	Callback = function(Value)
 		SelectedWeaphon = Value
 	end    
-})
-MainTab:AddButton({
-	Name = "Refresh Weaphons",
-	Callback = function()
-      	Inv = {}
-        for i, v in pairs(backpack:GetChildren()) do
-            table.insert(Inv, v.Name)
-        end
-        Dropdown:Refresh(Inv, true)
-         
- 
-  	end    
 })
 
 MainTab:AddToggle({
@@ -188,3 +167,6 @@ ShopTab:AddButton({
         player.Character.HumanoidRootPart.CFrame = game.workspace.Shop[SelectedShop].CFrame
     end    
 })
+
+
+OrionLib:Init()
