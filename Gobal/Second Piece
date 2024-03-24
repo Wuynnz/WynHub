@@ -1,3 +1,12 @@
+-- Bypass
+local playername = game.Players.LocalPlayer.Character
+
+local no1 = game.workspace.Lives:FindFirstChild(playername)
+
+if no1 then 
+    no1.Parent = game.workspace
+end
+-- Lib
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Wuynnz/WynHub/main/ABC/EwuFrieren')))()
 
 local Window = OrionLib:MakeWindow({
@@ -7,37 +16,41 @@ ConfigFolder = "OrionTest",
 IntroText = "Wyn Hub✓"
 })
 -- local
+
 local player = game.Players.LocalPlayer
+
 local backpack = player.Backpack
 local Shops = workspace.Shop:GetChildren()
+local mobs = workspace.Lives
+
 local SelectedShop = nil
 local SelectedWeaphon = nil
+
 local Shoptable = {}
  for i, v in pairs(Shops) do
            table.insert(Shoptable, v.name)
 end
+
 local Inv = {}
  for i, v in pairs(backpack:GetChildren()) do
     table.insert(Inv, v.name)
 end
+
+
+
+
 -- func
-function AutoKokushibu()
-    for i, v in pairs(workspace.Lives:GetChildren()) do
-        if v.Humanoid.DisplayName == "Kokushibo [LV.8500]" then 
-            player.Character:SetPrimaryPartCFrame(v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4))
-        end
-    end
-end
 
 local function autoEquip()
     
     local We = player.Backpack:FindFirstChild(SelectedWeaphon)
     if We then
         We.Parent = player.Character
-    else
-        Print("")
     end
 end
+
+
+
 
 function AutoPortal()
     local playerCharacter = player.Character
@@ -47,12 +60,11 @@ function AutoPortal()
             local portalPosition = portal.Position
             local distance = (playerPosition - portalPosition).magnitude
             if distance <= 10 then
-                fireproximityprompt(portal.ProximityPrompt)
-                break;
-            else
-                print("Player isn't near portal")
+                portal.ProximityPrompt:Fire()
+                return
             end
         end
+        print("Player isn't near portal")
     end
 end
 
@@ -82,7 +94,7 @@ MainTab:AddToggle({
 	Default = false,
 	Callback = function(State)
            getgenv().autoEquipWeaphon = State
-               while autoEquipWeaphon == true do wait()
+               while getgenv().autoEquipWeaphon == true do wait()
 		autoEquip()
             end
 	end    
@@ -92,19 +104,18 @@ MainTab:AddToggle({
 -- Portal tab
 PortalTab:AddParagraph("Frieren...", "")
 
-PortalTab:AddToggle({
-	Name = "Auto Join Portal",
-	Default = false,
-	Callback = function(State)
-		getgenv().AutoJoinPortal = State
-                  while AutoJoinPortal == true do 
-                    AutoPortal()
-                       wait()
-                
-                    end
-	end    
-})
 
+PortalTab:AddToggle({
+    Name = "Auto Join Portal",
+    Default = false,
+    Callback = function(State)
+        getgenv().AutoJoinPortal = State
+        while getgenv().AutoJoinPortal == true do 
+            AutoPortal()
+            wait(1) -- Add a delay to reduce CPU usage
+        end
+    end    
+})
 PortalTab:AddButton({
 	Name = "Tp Portal",
 	Callback = function()
@@ -114,17 +125,6 @@ wait(1)
 end
 
   	end    
-})
-
-PortalTab:AddToggle({
-	Name = "Auto Kokushibo",
-	Default = false,
-	Callback = function(State)
-		getgenv().AutoKillKokushibo = State
-                  while AutoKillKokushibo == true do wait()
-                          AutoKokushibu()
-              end
-	end    
 })
 
 -- Shop tab
