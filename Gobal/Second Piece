@@ -6,23 +6,106 @@ HidePremium = false, SaveConfig = true,
 ConfigFolder = "OrionTest",
 IntroText = "Wyn Hub✓"
 })
+-- local
+local player = game.Players.LocalPlayer
+-- func
+function AutoKokushibu()
+    for i, v in pairs(workspace.Lives:GetChildren()) do
+        if v.Humanoid.DisplayName == "Kokushibo [LV.8500]" then 
+            player.Character:SetPrimaryPartCFrame(v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 4))
+        end
+    end
+end
+
+
+
+function AutoPortal()
+    local playerCharacter = player.Character
+    if playerCharacter then
+        local playerPosition = playerCharacter.PrimaryPart.Position
+        for _, portal in ipairs(game.workspace.World.Portal:GetChildren()) do
+            local portalPosition = portal.Position
+            local distance = (playerPosition - portalPosition).magnitude
+            if distance <= 10 then
+                fireproximityprompt(portal.ProximityPrompt)
+                break;
+            else
+                print("Player isn't near portal")
+            end
+        end
+    end
+end
 
 -- tabs
-local MainTab = Window:MakeTab({Name = "Main",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+local MainTab = Window:MakeTab({Name = "🥇Main",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+local PortalTab = Window:MakeTab({Name = "☄️ Portal",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+local ShopTab = Window:MakeTab({Name = "💸 Shop",Icon = "rbxassetid://4483345998",PremiumOnly = false})
+
+
+
 
 -- Main tab
 
-local Section = MainTab:AddSection({
-	Name = "Hi ! Have a good day Frieren i ctn stop thinking about you<3?"
+MainTab:AddParagraph("Dear Frieren,","Have a good day Frieren ! i cant stop thinking about you :( ")
+
+-- Portal tab
+
+PortalTab:AddToggle({
+	Name = "Auto Join Portal",
+	Default = false,
+	Callback = function(State)
+		getgenv().AutoJoinPortal = State
+                  while AutoJoinPortal == true do 
+                    AutoPortal()
+                       wait()
+                    end
+	end    
+})
+
+PortalTab:AddButton({
+	Name = "Tp Portal",
+	Callback = function()
+      		for i, v in pairs(game.workspace.World.Portal:GetChildren()) do
+    player.Character.HumanoidRootPart.CFrame = v.CFrame * CFrame.new(0, 3, 10)
+wait(1)
+end
+
+  	end    
+})
+
+PortalTab:AddToggle({
+	Name = "Auto Kokushibo",
+	Default = false,
+	Callback = function(State)
+		getgenv().AutoKillKokushibo = State
+                  while AutoKillKokushibo == true do wait()
+                          AutoKokushibu()
+end
+	end    
+})
+
+
+--[[
+Name = <string> - The name of the toggle.
+Default = <bool> - The default value of the toggle.
+Callback = <function> - The function of the toggle.
+]]
+
+-- Shop tab
+ShopTab:AddParagraph("Merchant","")
+
+ShopTab:AddButton({
+	Name = "Tp To Traveling Merchant",
+	Callback = function()
+      		for i, Merchant in pairs(game.workspace.NPC:GetChildren()) do
+                    if Merchant.Name == "Traveling merchant" then
+                        player.Character.HumanoidRootPart.CFrame = Merchant.HumanoidRootPart.CFrame
+                      end
+                end
+  	end    
 })
 
 --[[
-Name = <string> - The name of the section.
+Name = <string> - The name of the button.
+Callback = <function> - The function of the button.
 ]]
-
-MainTab:AddButton({
-	Name = "Button!",
-	Callback = function()
-      		print("button pressed")
-  	end    
-})
