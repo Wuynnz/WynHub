@@ -1,0 +1,56 @@
+-- lib 
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/Wuynnz/WynHub/main/ABC/EwuFrieren')))()
+
+local Window = OrionLib:MakeWindow({
+    Name = "Second Piece ✓", 
+    HidePremium = false, 
+    SaveConfig = true, 
+    ConfigFolder = "OrionTest",
+    IntroText = "Wyn Hub✓"
+})
+
+-- local
+local player = game.Players.LocalPlayer
+local mobs = workspace.Lives
+
+-- tabs
+local Tab = Window:MakeTab({
+    Name = "Main", 
+    Icon = "rbxassetid://4483345998", 
+    PremiumOnly = false
+})
+
+-- func
+-- Function to continuously check and move the player's character if found in the Lives workspace
+function Automobs()
+    spawn(function()
+        while getgenv().AutoMobs == true do
+            local mobsExist = next(mobs:GetChildren()) ~= nil -- Check if there are any enemies in mobs
+            if not mobsExist then
+                -- Teleport to a specific CFrame
+                local targetCFrame = CFrame.new(0, 0, 0) -- Change this to your desired CFrame
+                player.Character:SetPrimaryPartCFrame(targetCFrame)
+            else
+                -- Loop through existing enemies and move towards them
+                for i, v in pairs(mobs:GetChildren()) do
+                    while v.Humanoid.Health > 0 do
+                        wait()
+                        player.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                    end
+                end
+            end
+            wait() -- Add a delay to avoid excessive checks
+        end
+    end)
+end
+
+-- tabs
+Tab:AddToggle({
+    Name = "Auto Mobs",
+    Default = false,
+    Callback = function(State)
+        getgenv().AutoMobs = State
+                    Automobs()
+        
+    end    
+})
