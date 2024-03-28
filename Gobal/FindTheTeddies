@@ -1,0 +1,13 @@
+local Library = loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+
+local PhantomForcesWindow = Library:NewWindow("Find The Teddies/ WynHub")
+
+local KillingCheats = PhantomForcesWindow:NewSection("Main")
+
+KillingCheats:CreateButton("Button", function()
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+
+for _, v in pairs(workspace.Teddies:GetChildren()) do
+    firetouchinterest(v, hrp, 0)
+end
+end)
