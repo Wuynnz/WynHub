@@ -73,7 +73,7 @@ function Library:CreateWindow(title, color)
     core.BackgroundColor3 = Color3.fromRGB(44, 44, 44)
     core.BorderColor3 = Color3.fromRGB(8, 8, 8)
     core.Position = UDim2.new(0.156000003, 0, 0.140000001, 0)
-    core.Size = UDim2.new(0, 501, 0, 531)
+    core.Size = UDim2.new(0, 531, 0, 501)
 
     outlinecore.Name = "outlinecore"
     outlinecore.Parent = core
